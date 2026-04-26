@@ -322,7 +322,7 @@ export function createApp(db: any, tables: any) {
     const fullPrompt = `${template.prefix}, ${description}, ${template.suffix}`;
     console.log("[API] Full prompt:", fullPrompt);
 
-    const MARSWAVE_API_KEY = "lh_sk_69e8f01c903755d875c6b46a_eeb5a2592a1864c8709e9e1f4eaa96c42201235769e55319";
+    const MARSWAVE_API_KEY = "lh_sk_69ed75ff0d68f53546e7577b_0c4a0f787e96458796f15f699c60d9f09fc8c014280ded12";
     const MARSWAVE_URL = "https://api.marswave.ai/openapi/v1/images/generation";
 
     try {
