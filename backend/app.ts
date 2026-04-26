@@ -328,24 +328,32 @@ export function createApp(db: any, tables: any) {
     try {
       const images: string[] = [];
 
-      // Generate 4 images sequentially
-      for (let i = 0; i < 4; i++) {
-        const response = await fetch(MARSWAVE_URL, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${MARSWAVE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            provider: "openai",
-            model: "gpt-image-2",
-            prompt: fullPrompt,
-            imageConfig: {
-              aspectRatio: "1:1",
-              imageSize: "1K",
+      // Generate 1 image (Base64 PNG response is large; keep to 1 for reliability)
+      for (let i = 0; i < 1; i++) {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 115000);
+        let response: Response;
+        try {
+          response = await fetch(MARSWAVE_URL, {
+            method: "POST",
+            signal: controller.signal,
+            headers: {
+              "Authorization": `Bearer ${MARSWAVE_API_KEY}`,
+              "Content-Type": "application/json",
             },
-          }),
-        });
+            body: JSON.stringify({
+              provider: "openai",
+              model: "gpt-image-2",
+              prompt: fullPrompt,
+              imageConfig: {
+                aspectRatio: "1:1",
+                imageSize: "1K",
+              },
+            }),
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
 
         if (!response.ok) {
           const errText = await response.text();
